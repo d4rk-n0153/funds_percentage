@@ -14,7 +14,7 @@ class fipiran(scrapy.Spider):
     bond=[]
     other=[]
     cash=[]
-    name="blahblah"
+    name="fipiran"
     start_urls=['https://fund.fipiran.ir/api/v1/fund/getfund?regno=11777']
     for _ in regs.regs:
         start_urls.append(regs.url+f"{_}")
@@ -31,17 +31,16 @@ class fipiran(scrapy.Spider):
             'name': self.fund_name,
             'stock': self.stock,
             'deposit': self.deposit,
-            # 'five_best': self.five_best,
             'bond': self.bond,
             'other': self.other,
             'cash': self.cash,
             
         })
         
-        df.to_excel('fipiran.xlsx')
+        df.to_html('templates/funds.html')
 
 runner = CrawlerRunner()
-d = runner.crawl(MySpider)
+d = runner.crawl(fipiran)
 d.addBoth(lambda _: reactor.stop())
 
 
