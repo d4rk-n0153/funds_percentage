@@ -27,7 +27,7 @@ class fipiran(scrapy.Spider):
         self.bond.append((loads(response.text).get('item')).get('bond'))
         self.other.append((loads(response.text).get('item')).get('other'))
         self.cash.append((loads(response.text).get('item')).get('cash'))
-        df=({
+        df=pd.DataFrame({
             'name': self.fund_name,
             'stock': self.stock,
             'deposit': self.deposit,
@@ -36,9 +36,8 @@ class fipiran(scrapy.Spider):
             'cash': self.cash,
             
         })
-        return df
-        # df.to_html('templates/funds.html')
-
+        
+        df.to_pickle("static/DB/database.dat",)
 runner = CrawlerRunner()
 d = runner.crawl(fipiran)
 d.addBoth(lambda _: reactor.stop())
