@@ -2,47 +2,39 @@ from twisted.internet import reactor
 import scrapy
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
+from scrapy.crawler import CrawlerProcess
 import regs
 import pandas as pd
 from json import loads
 
 class fipiran(scrapy.Spider):
-    fund_name=[]
-    deposit=[]
-    five_best=[]
-    stock=[]
-    bond=[]
-    other=[]
-    cash=[]
+    # custom_settings={
+    #     'FEEDS':{'static/DB/DB.json':{'format': 'json',
+    #         'encoding': 'utf8',
+    #             'store_empty': False, 'fields': None, 'indent': 4,}}}
     name="fipiran"
-    start_urls=['https://fund.fipiran.ir/api/v1/fund/getfund?regno=11777']
-    for _ in regs.regs:
-        start_urls.append(regs.url+f"{_}")
-        
+    start_urls=[regs.url+f"{_}" for _ in regs.regs]   
     def parse(self, response):
-        self.deposit.append((loads(response.text).get('item')).get('deposit'))
-        self.fund_name.append((loads(response.text).get('item')).get('name'))
-        self.five_best.append((loads(response.text).get('item')).get('fiveBest'))
-        self.stock.append((loads(response.text).get('item')).get('stock'))
-        self.bond.append((loads(response.text).get('item')).get('bond'))
-        self.other.append((loads(response.text).get('item')).get('other'))
-        self.cash.append((loads(response.text).get('item')).get('cash'))
-        df=pd.DataFrame({
-            'name': self.fund_name,
-            'stock': self.stock,
-            'deposit': self.deposit,
-            'bond': self.bond,
-            'other': self.other,
-            'cash': self.cash,
-            
-        })
+        df={
+            'name': ((loads(response.text).get('item')).get('name')),
+            'stock': (loads(response.text).get('item')).get('stock'),
+            'deposit': (loads(response.text).get('item')).get('deposit'),
+            # 'five_best': self.five_best,
+            'bond':((loads(response.text).get('item')).get('bond')),
+            'other':((loads(response.text).get('item')).get('other')),
+            'cash': ((loads(response.text).get('item')).get('cash')),
+         }
         
-        df.to_pickle("static/DB/database.dat",)
+        with open("static/DB/DB.json", "wb",encoding="utf-8") as file:
+            file.write(str(df))
+
 runner = CrawlerRunner()
 d = runner.crawl(fipiran)
 d.addBoth(lambda _: reactor.stop())
 
-
+# runner=CrawlerProcess()
+# runner.crawl(fipiran)
+# runner.start()
 
 
 

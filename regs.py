@@ -1,4 +1,4 @@
-url='https://fund.fipiran.ir/api/v1/fund/getfund?regno='
+url="https://fund.fipiran.ir/api/v1/fund/getfund?regno="
 regs=[
 10615
 ,11091
