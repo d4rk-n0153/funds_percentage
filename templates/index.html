@@ -4,17 +4,31 @@
 	<!-- <meta http-equiv="Refresh" content="30; url='http://127.0.0.1:5000/funds'" /> -->
 </head>
 <body>
-	<h1>{{other}}</h1>
-	<tr>
-		<th>نام صندوقها</th>
-		<th>تعداد سهام</th>
-		<th>مانده در بانک</th>
-		<th>اوراق</th>
-		<th>دیگر</th>
-		<th>نقد</th>
-		
-	</tr>
-<body>
+	<table class="funds">
+
+		<TR class="title">
+			<th>نام صندوق</th>
+			<th>سهام</th>
+			<th>حساب بانکی</th>
+			<th>اوراق</th>
+			<th>نقد</th>
+			<th>دیگر</th>
+
+		</TR>
+
+	{% for _ in range(name | length) %}
+
+			<TR class="title">
+				<th>{{name[_]}}</th>
+				<th>{{stock[_]}}</th>
+				<th>{{deposit[_]}}</th>
+				<th>{{bond[_]}}</th>
+				<th>{{cash[_]}}</th>
+				<th>{{other[_]}}</th>
+
+			</TR>
+	{%endfor %} 
+</body>
 
 
 </html>

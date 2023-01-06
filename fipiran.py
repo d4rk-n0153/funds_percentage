@@ -9,7 +9,8 @@ from json import loads
 
 class fipiran(scrapy.Spider):
     custom_settings={
-        'FEEDS':{'static/DB/DB.json':{'format': 'json',
+        'FEEDS':{'static/DB/DB.json':
+        {   'format': 'json',
             'encoding': 'utf8',
             'overwrite': True,
             'store_empty' : False,
@@ -20,9 +21,9 @@ class fipiran(scrapy.Spider):
         
         yield {
             'name':(((loads(response.text).get('item')).get('name'))),
-            'stock':(loads(response.text).get('item')).get('stock'),
+            'stock':(loads(response.text).get('item')).get("stock"),
             'deposit':(loads(response.text).get('item')).get('deposit'),
-            # 'five_best': self.five_best,
+            'five_best': (loads(response.text).get('item')).get("fiveBest"),
             'bond':((loads(response.text).get('item')).get('bond')),
             'other':((loads(response.text).get('item')).get('other')),
             'cash':((loads(response.text).get('item')).get('cash')),
